@@ -32,7 +32,6 @@ public final class GData {
     public static NetClient netClient;
     public static Tick tick;
     public static Dispatch dispatch;
-    // public static Player gmPlayer;
     public static PlayerManager playerManager;
     public static AuthManager authManager;
     public static HeartBeatHandle heartBeatHandle;
@@ -77,7 +76,6 @@ public final class GData {
         netClient = new NetClient();
         tick = new Tick();
         dispatch = new Dispatch();
-        // gmPlayer = new Player();
         playerManager = new PlayerManager();
         authManager = new AuthManager();
         heartBeatHandle = new HeartBeatHandle();
@@ -94,8 +92,5 @@ public final class GData {
         db = mongoClient.getDatabase("test");
 
         jedisPool = new JedisPool(new JedisPoolConfig(), "localhost", 6379);
-        // jedisSub = jedisPool.getResource();
-        // jedis = jedisPool.getResource();
-        // jedis.close();
     }
 }
