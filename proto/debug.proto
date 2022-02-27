@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+option java_package = "wang.ioai.exgs.pb";
+option java_outer_classname = "ProtoDebug";
+option csharp_namespace = "wang.ioai.exgs.Pb";
+
+message Ping {
+  uint64 id = 1;
+}
+
+message Pong {
+  uint64 id = 1;
+}
+
+message Hello {
+  string text = 1;
+}
+
+message Echo {
+  string text = 1;
+}
+
+message Cmd{
+  string text = 1;
+}
+
+message AuthUserReq {
+  string username = 1;
+  string password = 2;
+  uint64 uid = 3;
+  string sid = 4;  // 第三方
+  string token = 5; // 第三方
+}
+
+message AuthUserRet {
+  string username = 1;
+  uint64 uid = 2;
+  int32 result = 3;
+  string messge = 4;
+}
+
+message HeartBeat {
+  int64 time = 1; // 单位毫秒
+}
+
+message EnterSceneReq {
+  int32 id = 1; // 场景 ID
+}
+
+message EnterSceneRet {
+  int32 id = 1;       // 场景 ID
+  int32 error = 2;    // 错误码
+}
+
+message ExitSceneReq {
+  int32 id = 1; // 场景 ID
+}
+
+message ExitSceneRet {
+  int32 id = 1;       // 场景 ID
+  int32 error = 2;    // 错误码
+}
+
+message SceneInfoReq {
+  int32 id = 1;                   // 场景 ID
+}
+
+// 结构体
+message PlayerInfo {
+  uint64 uid = 1;   // 玩家 ID
+  int32 x = 2;      // 坐标
+  int32 y = 3;      // 坐标
+}
+
+message SceneInfoRet {
+  int32 id = 1;                   // 场景 ID
+  repeated PlayerInfo info = 2;   // 场景信息
+}
+
+message MoveReq {
+  int32 x = 1;      // 坐标
+  int32 y = 2;      // 坐标
+}
+
+message MoveRet {
+  int32 x = 1;      // 坐标
+  int32 y = 2;      // 坐标
+}
+
+message MoveSync {
+  int32 id = 1;                   // 场景 ID
+  repeated PlayerInfo info = 2;   // 场景信息
+}
