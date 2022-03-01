@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 
 public class MainCmd {
     private static final Logger logger = LoggerFactory.getLogger(MainClient.class);
-    private static final ExecutorService threadExecutor = Executors.newFixedThreadPool(4);
+    private static final ExecutorService threadExecutor = Executors.newFixedThreadPool(2);
 
     private static Jedis jedisSub;
     private static Jedis jedis;
