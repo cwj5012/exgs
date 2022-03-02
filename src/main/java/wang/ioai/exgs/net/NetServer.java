@@ -27,7 +27,7 @@ public final class NetServer {
         backlog = GData.config.server.manager.backlog;
     }
 
-    public void start() throws Exception {
+    public void start() {
         // Configure the server.
         bossGroup = new NioEventLoopGroup(4);
         workerGroup = new NioEventLoopGroup();
@@ -57,6 +57,8 @@ public final class NetServer {
 
             // Wait until the server socket is closed.
             f.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage());
         } finally {
             // Shut down all event loops to terminate all threads.
             bossGroup.shutdownGracefully();
