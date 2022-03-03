@@ -12,6 +12,7 @@ public class Boot {
 
     public void init() {
         logger.info("user.dir: {}", userDir);
+        logger.info("pid: {}", ProcessHandle.current().pid());
         GData.init();
         GData.config.load(Paths.get(userDir, "config/server.json").toString());
         GData.tick.init();
