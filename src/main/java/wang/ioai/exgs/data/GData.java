@@ -4,8 +4,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -25,8 +23,6 @@ import wang.ioai.exgs.system.Tick;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class GData {
-    private static final Logger logger = LoggerFactory.getLogger(GData.class);
-
     public static Config config;
     public static NetServer netServer;
     public static NetClient netClient;
