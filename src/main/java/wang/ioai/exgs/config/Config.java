@@ -20,7 +20,7 @@ public final class Config {
 
     public void load(String path) {
         ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File(path);
+        var file = new File(path);
         try {
             server = objectMapper.readValue(file, Server.class);
         } catch (IOException e) {

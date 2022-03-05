@@ -20,6 +20,7 @@ import wang.ioai.exgs.net.NetClient;
 import wang.ioai.exgs.net.NetServer;
 import wang.ioai.exgs.system.Tick;
 
+import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class GData {
@@ -83,6 +84,9 @@ public final class GData {
         lastTime = System.currentTimeMillis();
 
         sceneManager = new SceneManager();
+
+        // 先加载配置
+        GData.config.load(Paths.get(System.getProperty("user.dir"), "config/server.json").toString());
 
         mongoClient = new MongoClient("localhost", 27017);
         db = mongoClient.getDatabase("test");

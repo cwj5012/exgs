@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import wang.ioai.exgs.data.GData;
 
-import java.nio.file.Paths;
-
 public class Boot {
     private static final Logger logger = LoggerFactory.getLogger(Boot.class);
     private static final String userDir = System.getProperty("user.dir");
@@ -14,7 +12,6 @@ public class Boot {
         logger.info("user.dir: {}", userDir);
         logger.info("pid: {}", ProcessHandle.current().pid());
         GData.init();
-        GData.config.load(Paths.get(userDir, "config/server.json").toString());
         GData.tick.init();
         GData.netServer.init();
     }
