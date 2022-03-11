@@ -73,7 +73,6 @@ public class Tick {
                                 commands.get(cmd).run();
                             }
                         } else {
-                            // 格式：cmd
                             if (commands.containsKey(msg)) {
                                 command = "";
                                 commands.get(msg).run();
