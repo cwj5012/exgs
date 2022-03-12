@@ -11,8 +11,6 @@ public class Boot {
         logger.info("user.dir: {}", System.getProperty("user.dir"));
         logger.info("pid: {}", ProcessHandle.current().pid());
         GData.init();
-        GData.tick.init();
-        GData.netServer.init();
     }
 
     public void run() {
