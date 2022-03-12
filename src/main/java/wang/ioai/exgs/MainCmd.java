@@ -21,20 +21,28 @@ public class MainCmd {
     private static final String clientChannel = "client";
     private static final String serverChannel = "server";
 
-    public static void main(String[] args) {
-        JedisPool jedisPool = new JedisPool(new JedisPoolConfig(), "localhost", 6379);
-        jedisSub = jedisPool.getResource();
-        jedis = jedisPool.getResource();
+    private static final String redisHost = "localhost";
+    private static final int redisPort = 6379;
 
+    private static final String cmdQuit = "q";
+
+    public static void main(String[] args) {
         logger.info("current dir: {}", System.getProperty("user.dir"));
         logger.info("pid: {}", ProcessHandle.current().pid());
         logger.info("enter 'q' to exit the process.");
+
+        // 初始化 redis 连接池
+        JedisPool jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort);
+        jedisSub = jedisPool.getResource();
+        jedis = jedisPool.getResource();
+
+        // 接收 console 命令并发布通告
         threadExecutor.execute(() -> {
             try {
                 while (true) {
                     Scanner sc = new Scanner(System.in);
                     var cmd = sc.nextLine();
-                    if (cmd.equals("q")) {
+                    if (cmd.equals(cmdQuit)) {
                         jedisPubSub.unsubscribe();
                         break;
                     }
@@ -44,6 +52,8 @@ public class MainCmd {
                 logger.debug(e.getMessage());
             }
         });
+
+        // 订阅结果
         threadExecutor.execute(() -> {
             jedisPubSub = new JedisPubSub() {
                 @Override
@@ -65,5 +75,7 @@ public class MainCmd {
             jedisSub.subscribe(jedisPubSub, serverChannel);
         });
         threadExecutor.shutdown();
+
+        System.out.println("exit ok.");
     }
 }
