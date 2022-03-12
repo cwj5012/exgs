@@ -6,10 +6,9 @@ import wang.ioai.exgs.data.GData;
 
 public class Boot {
     private static final Logger logger = LoggerFactory.getLogger(Boot.class);
-    private static final String userDir = System.getProperty("user.dir");
 
     public void init() {
-        logger.info("user.dir: {}", userDir);
+        logger.info("user.dir: {}", System.getProperty("user.dir"));
         logger.info("pid: {}", ProcessHandle.current().pid());
         GData.init();
         GData.tick.init();
