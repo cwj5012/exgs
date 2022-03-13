@@ -18,6 +18,7 @@ import wang.ioai.exgs.game.user.InfoHandle;
 import wang.ioai.exgs.net.Dispatch;
 import wang.ioai.exgs.net.NetClient;
 import wang.ioai.exgs.net.NetServer;
+import wang.ioai.exgs.system.Command;
 import wang.ioai.exgs.system.Tick;
 
 import java.nio.file.Paths;
@@ -28,6 +29,7 @@ public final class GData {
     public static NetServer netServer;
     public static NetClient netClient;
     public static Tick tick;
+    public static Command command;
     public static Dispatch dispatch;
     public static PlayerManager playerManager;
     public static AuthManager authManager;
@@ -72,6 +74,7 @@ public final class GData {
         netServer = new NetServer();
         netClient = new NetClient();
         tick = new Tick();
+        command = new Command();
         dispatch = new Dispatch();
         playerManager = new PlayerManager();
         authManager = new AuthManager();
@@ -92,5 +95,9 @@ public final class GData {
         db = mongoClient.getDatabase("test");
 
         jedisPool = new JedisPool(new JedisPoolConfig(), "localhost", 6379);
+
+        GData.command.init();
+        GData.tick.init();
+        GData.netServer.init();
     }
 }
