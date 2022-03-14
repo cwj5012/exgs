@@ -74,8 +74,7 @@ public class MainCmd {
 
             jedisSub.subscribe(jedisPubSub, serverChannel);
         });
-        threadExecutor.shutdown();
 
-        System.out.println("exit ok.");
+        threadExecutor.shutdown();
     }
 }
