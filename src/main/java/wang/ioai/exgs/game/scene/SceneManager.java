@@ -52,6 +52,10 @@ public class SceneManager {
     }
 
     public String DebugStatus() {
+        if (playerInfo.isEmpty()) {
+            return "null";
+        }
+
         StringBuilder result = new StringBuilder();
         for (var item : playerInfo.entrySet()) {
             result.append(String.format("player %d x %d y %d\n",
