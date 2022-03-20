@@ -10,3 +10,8 @@ mongodb: 5.0.6
 redis: 6.2.6
 
 As the project is use basic functions in mongodb and redis, so lower version may be ok, but not tested.
+
+# usage
+
+Clinet (N) -> GateServer (N) -> GameServer (N) -> DataBase (N) 
+
