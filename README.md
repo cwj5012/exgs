@@ -13,5 +13,10 @@ As the project is use basic functions in mongodb and redis, so lower version may
 
 # usage
 
-Clinet (N) -> GateServer (N) -> GameServer (N) -> DataBase (N) 
+```shell
+Clinet (N) → GateServer (N) → GameServer (N) → DataBase (N)
+                  ↑
+           → LoginServer (N)
+```
+
 
