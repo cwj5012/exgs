@@ -7,6 +7,7 @@ import io.netty.channel.ChannelId;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import wang.ioai.exgs.boot.Boot;
 import wang.ioai.exgs.config.Config;
 import wang.ioai.exgs.game.Player;
 import wang.ioai.exgs.game.PlayerManager;
@@ -25,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class GData {
+    private static Boot boot;
     public static Config config;
     public static NetServer netServer;
     public static NetClient netClient;
@@ -51,6 +53,14 @@ public final class GData {
     public static JedisPool jedisPool;
 
     public static SceneManager sceneManager;
+
+    public static Boot getBoot() {
+        return boot;
+    }
+
+    public static void setBoot(Boot boot) {
+        GData.boot = boot;
+    }
 
     public static class ChannelInfo {
         public Channel channel;
