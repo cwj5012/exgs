@@ -1,6 +1,6 @@
 package wang.ioai.exgs.core.config;
 
-public class Listen {
+public class ListenInfo {
     public String ip;
     public String port;
     public int backlog;
