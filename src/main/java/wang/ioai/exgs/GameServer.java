@@ -1,6 +1,6 @@
 package wang.ioai.exgs;
 
-import wang.ioai.exgs.boot.Boot;
+import wang.ioai.exgs.core.boot.Boot;
 
 public class GameServer {
     public static void main(String[] args) {

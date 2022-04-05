@@ -2,11 +2,11 @@ package wang.ioai.exgs.game.debug;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import wang.ioai.exgs.data.GData;
-import wang.ioai.exgs.data.Opcode;
+import wang.ioai.exgs.core.data.GData;
+import wang.ioai.exgs.core.data.Opcode;
 import wang.ioai.exgs.game.INetMessage;
-import wang.ioai.exgs.net.Dispatch;
-import wang.ioai.exgs.net.msg.NetMessage;
+import wang.ioai.exgs.core.net.Dispatch;
+import wang.ioai.exgs.core.net.msg.NetMessage;
 
 public class HeartBeatHandle implements INetMessage {
     private static final Logger logger = LoggerFactory.getLogger(HeartBeatHandle.class);

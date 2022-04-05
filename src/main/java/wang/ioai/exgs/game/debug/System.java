@@ -2,13 +2,13 @@ package wang.ioai.exgs.game.debug;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import wang.ioai.exgs.data.GData;
-import wang.ioai.exgs.data.Opcode;
+import wang.ioai.exgs.core.data.GData;
+import wang.ioai.exgs.core.data.Opcode;
 import wang.ioai.exgs.game.INetMessage;
 import wang.ioai.exgs.game.Player;
-import wang.ioai.exgs.net.msg.NetMessage;
-import wang.ioai.exgs.net.msg.ProtoMessage;
-import wang.ioai.exgs.pb.ProtoDebug;
+import wang.ioai.exgs.core.net.msg.NetMessage;
+import wang.ioai.exgs.core.net.msg.ProtoMessage;
+import wang.ioai.exgs.core.pb.ProtoDebug;
 
 public class System implements INetMessage {
     private static final Logger logger = LoggerFactory.getLogger(System.class);

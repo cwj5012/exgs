@@ -4,7 +4,7 @@ import wang.ioai.exgs.game.debug.HeartBeat;
 import wang.ioai.exgs.game.debug.System;
 import wang.ioai.exgs.game.scene.Scene;
 import wang.ioai.exgs.game.user.Info;
-import wang.ioai.exgs.net.msg.NetMessage;
+import wang.ioai.exgs.core.net.msg.NetMessage;
 
 public class Player {
     public System system;

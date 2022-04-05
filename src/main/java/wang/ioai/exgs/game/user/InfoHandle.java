@@ -2,9 +2,9 @@ package wang.ioai.exgs.game.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import wang.ioai.exgs.data.GData;
+import wang.ioai.exgs.core.data.GData;
 import wang.ioai.exgs.game.INetMessage;
-import wang.ioai.exgs.net.msg.NetMessage;
+import wang.ioai.exgs.core.net.msg.NetMessage;
 
 public class InfoHandle  implements INetMessage {
     private static final Logger logger = LoggerFactory.getLogger(InfoHandle.class);
