@@ -10,6 +10,9 @@ public class Boot {
     public void init() {
         logger.info("user.dir: {}", System.getProperty("user.dir"));
         logger.info("pid: {}", ProcessHandle.current().pid());
+        // 添加到 GData
+        GData.setBoot(this);
+        // 初始化所有组件
         GData.init();
     }
 
