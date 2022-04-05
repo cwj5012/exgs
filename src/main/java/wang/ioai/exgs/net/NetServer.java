@@ -16,9 +16,11 @@ import wang.ioai.exgs.net.handler.ProtoHandler;
 public final class NetServer {
     private static final Logger logger = LoggerFactory.getLogger(NetServer.class);
 
-    private String host;    // 服务器监听地址
-    private int port;       // 服务器监听端口
-    private int backlog;
+    private String host;                    // 服务器监听地址
+    private int port;                       // 服务器监听端口
+    private int backlog;                    // 完成队列长度
+    private int bossThreadNum;              // netty accept 线程数
+    private int workerThreadNum;              // netty worker 线程数
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
@@ -27,11 +29,13 @@ public final class NetServer {
         host = GData.config.server.manager.ip;
         port = Integer.parseInt(GData.config.server.manager.port);
         backlog = GData.config.server.manager.backlog;
+        bossThreadNum = GData.config.server.manager.bossThreadNum;
+        workerThreadNum = GData.config.server.manager.workerThreadNum;
     }
 
     public void start() {
-        bossGroup = new NioEventLoopGroup(4);
-        workerGroup = new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup(bossThreadNum);
+        workerGroup = new NioEventLoopGroup(workerThreadNum);
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)

@@ -3,12 +3,16 @@
   "manager": {
     "ip": "0.0.0.0",
     "port": "9001",
-    "backlog": 128
+    "backlog": 128,
+    "bossThreadNum": 1,
+    "workerThreadNum": 4
   },
   "game": {
     "ip": "0.0.0.0",
     "port": "9002",
-    "backlog": 65535
+    "backlog": 65535,
+    "bossThreadNum": 1,
+    "workerThreadNum": 4
   },
   "mongo_host": "localhost",
   "mongo_port": 27017,
