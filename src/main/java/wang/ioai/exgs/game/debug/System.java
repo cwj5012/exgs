@@ -8,7 +8,7 @@ import wang.ioai.exgs.game.INetMessage;
 import wang.ioai.exgs.game.Player;
 import wang.ioai.exgs.core.net.msg.NetMessage;
 import wang.ioai.exgs.core.net.msg.ProtoMessage;
-import wang.ioai.exgs.core.pb.ProtoDebug;
+import wang.ioai.exgs.pb.ProtoDebug;
 
 public class System implements INetMessage {
     private static final Logger logger = LoggerFactory.getLogger(System.class);

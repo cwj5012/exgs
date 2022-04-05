@@ -1,6 +1,6 @@
 package wang.ioai.exgs.game.scene;
 
-import wang.ioai.exgs.core.pb.ProtoDebug;
+import wang.ioai.exgs.pb.ProtoDebug;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -9,10 +9,15 @@ public class Server {
     public Listen manager;
     @JsonProperty("game")
     public Listen game;
+    @JsonProperty("route")
+    public Listen route;
+
     public String mongo_host;
     public int mongo_port;
+
     public String mysql_host;
     public int mysql_port;
+
     public String redis_host;
     public int redis_port;
 }

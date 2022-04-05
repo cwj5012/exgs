@@ -11,7 +11,7 @@ import wang.ioai.exgs.game.PlayerContainer;
 import wang.ioai.exgs.core.net.Dispatch;
 import wang.ioai.exgs.core.net.msg.NetMessage;
 import wang.ioai.exgs.core.net.msg.ProtoMessage;
-import wang.ioai.exgs.core.pb.ProtoDebug;
+import wang.ioai.exgs.pb.ProtoDebug;
 
 import java.util.HashMap;
 

@@ -14,6 +14,13 @@
     "bossThreadNum": 1,
     "workerThreadNum": 4
   },
+  "route": {
+    "ip": "0.0.0.0",
+    "port": "9003",
+    "backlog": 65535,
+    "bossThreadNum": 1,
+    "workerThreadNum": 4
+  },
   "mongo_host": "localhost",
   "mongo_port": 27017,
   "mysql_host": "localhost",

@@ -12,7 +12,7 @@ import wang.ioai.exgs.core.net.codec.ProtoDecoder;
 import wang.ioai.exgs.core.net.codec.ProtoEncoder;
 import wang.ioai.exgs.core.net.handler.EchoClientHandler;
 import wang.ioai.exgs.core.net.msg.ProtoMessage;
-import wang.ioai.exgs.core.pb.ProtoDebug;
+import wang.ioai.exgs.pb.ProtoDebug;
 
 import java.io.BufferedReader;
 import java.io.IOException;
