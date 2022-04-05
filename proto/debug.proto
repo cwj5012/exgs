@@ -4,6 +4,8 @@ option java_package = "wang.ioai.exgs.pb";
 option java_outer_classname = "ProtoDebug";
 option csharp_namespace = "wang.ioai.exgs.Pb";
 
+// 基础测试协议
+
 message Ping {
   uint64 id = 1;
 }
@@ -23,6 +25,8 @@ message Echo {
 message Cmd{
   string text = 1;
 }
+
+// 游戏 demo 协议
 
 message AuthUserReq {
   string username = 1;
