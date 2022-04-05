@@ -16,19 +16,20 @@ import wang.ioai.exgs.net.handler.ProtoHandler;
 public final class NetServer {
     private static final Logger logger = LoggerFactory.getLogger(NetServer.class);
 
-    private int port;
+    private String host;    // 服务器监听地址
+    private int port;       // 服务器监听端口
     private int backlog;
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
 
     public void init() {
+        host = GData.config.server.manager.ip;
         port = Integer.parseInt(GData.config.server.manager.port);
         backlog = GData.config.server.manager.backlog;
     }
 
     public void start() {
-        // Configure the server.
         bossGroup = new NioEventLoopGroup(4);
         workerGroup = new NioEventLoopGroup();
         try {
@@ -46,23 +47,16 @@ public final class NetServer {
                             p.addLast(new LengthFieldBasedFrameDecoder(GDefine.byteOrder, GDefine.maxFrameLength,
                                     GDefine.lengthFieldOffset, GDefine.lengthFieldLength, GDefine.lengthAdjustment,
                                     GDefine.initialBytesToStrip, GDefine.failFast));
-                            // p.addLast(new ProtoDecoder());
                             p.addLast(new ProtoEncoder());
                             p.addLast(new ProtoHandler());
                         }
                     });
-
-            // Start the server.
-            ChannelFuture f = b.bind(port).sync();
-
-            // Wait until the server socket is closed.
+            ChannelFuture f = b.bind(host, port).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             logger.error(e.getMessage());
         } finally {
-            // Shut down all event loops to terminate all threads.
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
+            close();
         }
     }
 

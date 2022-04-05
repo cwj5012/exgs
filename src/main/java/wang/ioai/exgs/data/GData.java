@@ -101,8 +101,8 @@ public final class GData {
         // 先加载配置
         GData.config.load(Paths.get(System.getProperty("user.dir"), "config/server.json").toString());
 
-        mongoClient = new MongoClient("localhost", 27017);
-        db = mongoClient.getDatabase("test");
+        // mongoClient = new MongoClient("localhost", 27017);
+        // db = mongoClient.getDatabase("test");
 
         jedisPool = new JedisPool(new JedisPoolConfig(), "localhost", 6379);
 
