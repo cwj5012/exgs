@@ -23,6 +23,14 @@ public class Dispatch {
         messageMap.remove(opcode);
     }
 
+    public void registMessage1(short opcode, INetMessage module) {
+        messageMap.put(opcode, module);
+    }
+
+    public void removeMessage1(short opcode, INetMessage module) {
+        messageMap.remove(opcode);
+    }
+
     public void onMessage(NetMessage msg) throws Exception {
         if (messageMap.containsKey(msg.getOpcode())) {
             messageMap.get(msg.getOpcode()).onMessage(msg);
