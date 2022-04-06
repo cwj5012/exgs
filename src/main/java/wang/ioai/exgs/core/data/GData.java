@@ -108,6 +108,6 @@ public final class GData {
 
         GData.command.init();
         GData.tick.init();
-        GData.netServer.init();
+        // GData.netServer.init();
     }
 }
