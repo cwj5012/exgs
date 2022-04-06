@@ -47,7 +47,7 @@ public class MainClient {
                         }
                         if (s.indexOf("cmd ") == 0) {
                             var proto = ProtoDebug.Cmd.newBuilder().setText(s.substring(4)).build();
-                            var msg = new ProtoMessage(proto, Opcode.Cmd);
+                            var msg = new ProtoMessage(proto, Opcode.CmdReq);
                             pipe.channel().writeAndFlush(msg);
                             continue;
                         }
@@ -58,7 +58,7 @@ public class MainClient {
                         }
                         if (s.indexOf("echo ") == 0) {
                             var proto = ProtoDebug.Echo.newBuilder().setText(s.substring(5)).build();
-                            var msg = new ProtoMessage(proto, Opcode.Echo);
+                            var msg = new ProtoMessage(proto, Opcode.EchoReq);
                             pipe.channel().writeAndFlush(msg);
                         }
                     } catch (IOException e) {
