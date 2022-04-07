@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option java_package = "wang.ioai.exgs.pb";
+option java_package = "wang.ioai.exgs.common.pb";
 option java_outer_classname = "ProtoDebug";
-option csharp_namespace = "wang.ioai.exgs.Pb";
+option csharp_namespace = "wang.ioai.exgs.common.Pb";
 
 // 基础测试协议
 
