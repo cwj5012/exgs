@@ -2,7 +2,7 @@ package wang.ioai.exgs.core.net;
 
 import io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueue;
 import wang.ioai.exgs.core.data.GDefine;
-import wang.ioai.exgs.game.INetMessage;
+import wang.ioai.exgs.exec.game.INetMessage;
 import wang.ioai.exgs.core.net.msg.NetMessage;
 
 import java.util.HashMap;
