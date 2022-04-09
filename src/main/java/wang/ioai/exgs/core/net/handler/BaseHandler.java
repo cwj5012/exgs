@@ -8,23 +8,30 @@ import wang.ioai.exgs.core.net.Dispatch;
 import wang.ioai.exgs.core.net.NetServer;
 import wang.ioai.exgs.core.net.msg.NetMessage;
 import wang.ioai.exgs.core.net.msg.ProtoMessage;
+import wang.ioai.exgs.core.system.NodeInfo;
 import wang.ioai.exgs.exec.game.INetMessage;
 import wang.ioai.exgs.exec.master.MasterBoot;
 
 public class BaseHandler implements INetMessage {
     private static final Logger logger = LoggerFactory.getLogger(BaseHandler.class);
 
-    private NetServer netServer;
+    private final NetServer netServer;
+    private NodeInfo nodeInfo;
 
     public BaseHandler(NetServer netServer) {
         this.netServer = netServer;
+
+    }
+    public BaseHandler(NetServer netServer, NodeInfo nodeInfo) {
+        this.netServer = netServer;
+        this.nodeInfo = nodeInfo;
     }
 
     public void init(Dispatch dispatch) {
         dispatch.registMessage1(Opcode.Ping, this);
         dispatch.registMessage1(Opcode.Pong, this);
-        dispatch.registMessage1(Opcode.CmdReq, this);
         dispatch.registMessage1(Opcode.EchoReq, this);
+        dispatch.registMessage1(Opcode.CmdReq, this);
     }
 
     @Override
@@ -55,21 +62,7 @@ public class BaseHandler implements INetMessage {
                     netServer.close();
                 }
                 if (cmd.equals("status")) {
-                    var spb = ProtoDebug.Cmd.newBuilder()
-                            .setText(String.format("""
-                                            \n===================================================
-                                            status: %s
-                                            start_time: %d run_time: %d s
-                                            node_id: %d node_type: %d
-                                            ===================================================
-                                            """,
-                                    MasterBoot.nodeInfo.status,
-                                    MasterBoot.nodeInfo.start_time / 1000,
-                                    MasterBoot.nodeInfo.getRunTime() / 1000,
-                                    MasterBoot.nodeInfo.node_id,
-                                    MasterBoot.nodeInfo.node_type
-                            ))
-                            .build();
+                    var spb = ProtoDebug.Cmd.newBuilder().setText(nodeInfo.toString()).build();
                     var smsg = new ProtoMessage(spb, Opcode.CmdRet);
                     msg.getChannel().writeAndFlush(smsg);
                 }

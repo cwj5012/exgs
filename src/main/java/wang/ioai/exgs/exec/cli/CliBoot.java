@@ -53,7 +53,10 @@ public class CliBoot {
                 while (true) {
                     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     try {
-                        String s = br.readLine();
+                        var s = br.readLine();
+                        if (s.isEmpty()) {
+                            continue;
+                        }
                         if (s.indexOf("ping") == 0) {
                             var proto = ProtoDebug.Ping.newBuilder().setId(++pingId).build();
                             var msg = new ProtoMessage(proto, Opcode.Ping);
@@ -66,8 +69,8 @@ public class CliBoot {
                             pipe.channel().writeAndFlush(msg);
                             continue;
                         }
-                        if (s.indexOf("cmd ") == 0) {
-                            var proto = ProtoDebug.Cmd.newBuilder().setText(s.substring(4)).build();
+                        if (s.indexOf("/") == 0) {
+                            var proto = ProtoDebug.Cmd.newBuilder().setText(s.substring(1)).build();
                             var msg = new ProtoMessage(proto, Opcode.CmdReq);
                             pipe.channel().writeAndFlush(msg);
                             continue;
@@ -98,8 +101,8 @@ public class CliBoot {
                             pipe.addLast(protoHandler);
                         }
                     });
-            logger.info("connect to {}:{}", "localhost", 9001);
-            ChannelFuture f = b.connect("127.0.0.1", 9001).sync();
+            logger.info("connect to {}:{}", "localhost", 9004);
+            ChannelFuture f = b.connect("127.0.0.1", 9004).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             logger.error(e.getMessage());

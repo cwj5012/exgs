@@ -36,12 +36,12 @@ public class NodeInfo {
                         node_id: %d node_type: %d
                         ===================================================
                         """,
-                MasterBoot.nodeInfo.uuid,
-                MasterBoot.nodeInfo.status,
-                MasterBoot.nodeInfo.start_time / 1000,
-                MasterBoot.nodeInfo.getRunTime() / 1000,
-                MasterBoot.nodeInfo.node_id,
-                MasterBoot.nodeInfo.node_type
+                uuid,
+                status,
+                start_time / 1000,
+                getRunTime() / 1000,
+                node_id,
+                node_type
         );
     }
 }

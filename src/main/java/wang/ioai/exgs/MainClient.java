@@ -45,7 +45,7 @@ public class MainClient {
                             pipe.channel().writeAndFlush(msg);
                             continue;
                         }
-                        if (s.indexOf("cmd ") == 0) {
+                        if (s.indexOf("/") == 0) {
                             var proto = ProtoDebug.Cmd.newBuilder().setText(s.substring(4)).build();
                             var msg = new ProtoMessage(proto, Opcode.CmdReq);
                             pipe.channel().writeAndFlush(msg);

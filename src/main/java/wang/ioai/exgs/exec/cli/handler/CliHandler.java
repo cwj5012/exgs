@@ -54,7 +54,7 @@ public class CliHandler implements INetMessage {
             }
             case Opcode.CmdRet -> {
                 var pb = ProtoDebug.Cmd.parseFrom(msg.getBuf());
-                logger.debug("cmd ret: {}", pb.getText());
+                logger.debug("/ ret: {}", pb.getText());
             }
             default -> {
                 logger.warn("Unexpected value: {}", msg.getOpcode());
