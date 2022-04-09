@@ -8,6 +8,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import wang.ioai.exgs.core.config.ServerBaseConfig;
 import wang.ioai.exgs.core.data.GDefine;
 import wang.ioai.exgs.core.net.codec.ProtoEncoder;
 import wang.ioai.exgs.core.net.handler.ProtoHandler;
@@ -20,17 +22,21 @@ public final class NetServer {
     private int port;                       // 服务器监听端口
     private int backlog;                    // 完成队列长度
     private int bossThreadNum;              // netty accept 线程数
-    private int workerThreadNum;              // netty worker 线程数
+    private int workerThreadNum;            // netty worker 线程数
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
+    private ChannelFuture f;
 
-    public void init() {
-        host = GData.config.server.manager.ip;
-        port = Integer.parseInt(GData.config.server.manager.port);
-        backlog = GData.config.server.manager.backlog;
-        bossThreadNum = GData.config.server.manager.bossThreadNum;
-        workerThreadNum = GData.config.server.manager.workerThreadNum;
+    public Dispatch dispatch;
+
+    public void init(ServerBaseConfig config) {
+        host = config.ip;
+        port = config.port;
+        backlog = config.backlog;
+        bossThreadNum = config.bossThreadNum;
+        workerThreadNum = config.workerThreadNum;
+        dispatch = new Dispatch();
     }
 
     public void start() {
@@ -44,28 +50,38 @@ public final class NetServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ChannelPipeline p = ch.pipeline();
-                            logger.debug("new {}", p.channel().id().asShortText());
-                            GData.channels.put(p.channel().id(),
-                                    new GData.ChannelInfo(p.channel(), System.currentTimeMillis()));
-                            p.addLast(new LengthFieldBasedFrameDecoder(GDefine.byteOrder, GDefine.maxFrameLength,
+                            ChannelPipeline pipe = ch.pipeline();
+                            logger.debug("accept: {}", pipe.channel().id().asShortText());
+                            GData.channels.put(pipe.channel().id(), new GData.ChannelInfo(pipe.channel(), System.currentTimeMillis()));
+                            // 解码
+                            pipe.addLast(new LengthFieldBasedFrameDecoder(GDefine.byteOrder, GDefine.maxFrameLength,
                                     GDefine.lengthFieldOffset, GDefine.lengthFieldLength, GDefine.lengthAdjustment,
                                     GDefine.initialBytesToStrip, GDefine.failFast));
-                            p.addLast(new ProtoEncoder());
-                            p.addLast(new ProtoHandler());
+                            // 编码
+                            pipe.addLast(new ProtoEncoder());
+                            // 消息处理
+                            var protoHandler = new ProtoHandler();
+                            protoHandler.setDispatch(dispatch);
+                            pipe.addLast(protoHandler);
                         }
                     });
-            ChannelFuture f = b.bind(host, port).sync();
+            f = b.bind(host, port).sync();
+            logger.info("listen {}:{}", host, port);
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             logger.error(e.getMessage());
         } finally {
-            close();
+            shutdown();
         }
     }
 
-    public void close() {
+    public void close(){
+        f.channel().close();
+    }
+
+    private void shutdown() {
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
+        logger.info("netty group shutdown.");
     }
 }

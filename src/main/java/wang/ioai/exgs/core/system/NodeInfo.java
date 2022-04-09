@@ -9,7 +9,6 @@ public class NodeInfo {
     public String uuid;               // 唯一 id
     public EStatus status;          // 运行状态
     public long start_time;         // 进程启动时间
-    public long run_time;           // 进程运行时长
     public int node_id;             // 节点 id
     public int node_type;           // 节点类型
 
@@ -21,6 +20,10 @@ public class NodeInfo {
         start_time = Instant.now().toEpochMilli();
     }
 
+    /**
+     * 进程运行时间
+     * @return
+     */
     public long getRunTime() {
         return Instant.now().toEpochMilli() - start_time;
     }
