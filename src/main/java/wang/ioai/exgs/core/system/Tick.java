@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import wang.ioai.exgs.core.data.GDefine;
 import wang.ioai.exgs.core.data.GData;
-import wang.ioai.exgs.game.PlayerContainer;
+import wang.ioai.exgs.exec.game.PlayerContainer;
 
 import java.util.concurrent.*;
 
