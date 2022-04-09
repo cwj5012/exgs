@@ -1,7 +1,6 @@
 package wang.ioai.exgs.core.system;
 
 import wang.ioai.exgs.core.define.EStatus;
-import wang.ioai.exgs.exec.master.MasterBoot;
 
 import java.time.Instant;
 import java.util.UUID;
