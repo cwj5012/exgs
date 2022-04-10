@@ -35,6 +35,7 @@ public class ProtoDecoder extends SimpleChannelInboundHandler<ByteBuf> {
         netMsg.setChannel(ctx.channel());
         msg.release();
         logger.debug("{}", netMsg);
+
         //将消息传递下去，或者在这里将消息发布出去
         ctx.fireChannelRead(netMsg);
 

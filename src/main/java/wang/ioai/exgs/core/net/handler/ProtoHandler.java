@@ -7,20 +7,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import wang.ioai.exgs.core.data.GDefine;
 import wang.ioai.exgs.core.data.GData;
+import wang.ioai.exgs.core.net.Dispatch;
 import wang.ioai.exgs.core.net.msg.NetMessage;
 
 public class ProtoHandler extends SimpleChannelInboundHandler<ByteBuf> {
     private static final Logger logger = LoggerFactory.getLogger(ProtoHandler.class);
+    private Dispatch dispatch;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        logger.debug(Thread.currentThread().getStackTrace()[1].getMethodName());
+        logger.debug("channelActive {}", ctx.channel().id().asShortText());
         super.channelActive(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        logger.debug(Thread.currentThread().getStackTrace()[1].getMethodName());
+        logger.debug("channelInactive {}", ctx.channel().id().asShortText());
         super.channelInactive(ctx);
     }
 
@@ -36,6 +38,7 @@ public class ProtoHandler extends SimpleChannelInboundHandler<ByteBuf> {
         msg.readBytes(buf);
         netMsg.setBuf(buf);
         netMsg.setChannel(ctx.channel());
+
         // 导致异常
         // msg.release();
 
@@ -47,8 +50,13 @@ public class ProtoHandler extends SimpleChannelInboundHandler<ByteBuf> {
             GData.lastTime = System.currentTimeMillis();
             GData.recvCountLast = GData.recvCount;
         }
+
         // 直接响应消息
-        GData.dispatch.onMessage(netMsg);
+        if (dispatch != null) {
+            dispatch.onMessage(netMsg);
+        } else {
+            logger.error("dispatch is null.");
+        }
 
         // 时间片响应消息
         // if (!GData.dispatch.queue.offer(msg)) {
@@ -64,6 +72,11 @@ public class ProtoHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         logger.error("{}", cause.getMessage());
+        cause.printStackTrace();
         ctx.close();
+    }
+
+    public void setDispatch(Dispatch dispatch) {
+        this.dispatch = dispatch;
     }
 }
