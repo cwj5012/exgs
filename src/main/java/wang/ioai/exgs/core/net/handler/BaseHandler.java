@@ -22,6 +22,7 @@ public class BaseHandler implements INetMessage {
         this.netServer = netServer;
 
     }
+
     public BaseHandler(NetServer netServer, NodeInfo nodeInfo) {
         this.netServer = netServer;
         this.nodeInfo = nodeInfo;
@@ -37,13 +38,6 @@ public class BaseHandler implements INetMessage {
     @Override
     public void onMessage(NetMessage msg) throws Exception {
         switch (msg.getOpcode()) {
-            case Opcode.EchoReq -> {
-                var rpb = ProtoDebug.Echo.parseFrom(msg.getBuf());
-                // logger.debug("echo: {}", rpb.getText());
-                var spb = ProtoDebug.Echo.newBuilder().setText(rpb.getText()).build();
-                var smsg = new ProtoMessage(spb, Opcode.EchoRet);
-                msg.getChannel().writeAndFlush(smsg);
-            }
             case Opcode.Ping -> {
                 var rpb = ProtoDebug.Ping.parseFrom(msg.getBuf());
                 var spb = ProtoDebug.Pong.newBuilder().setId(rpb.getId()).build();
@@ -53,6 +47,13 @@ public class BaseHandler implements INetMessage {
             case Opcode.Pong -> {
                 var pb = ProtoDebug.Pong.parseFrom(msg.getBuf());
                 logger.debug("pong: {}", pb.getId());
+            }
+            case Opcode.EchoReq -> {
+                var rpb = ProtoDebug.Echo.parseFrom(msg.getBuf());
+                // logger.debug("echo: {}", rpb.getText());
+                var spb = ProtoDebug.Echo.newBuilder().setText(rpb.getText()).build();
+                var smsg = new ProtoMessage(spb, Opcode.EchoRet);
+                msg.getChannel().writeAndFlush(smsg);
             }
             case Opcode.CmdReq -> {
                 var pb = ProtoDebug.Cmd.parseFrom(msg.getBuf());
@@ -66,10 +67,13 @@ public class BaseHandler implements INetMessage {
                     var smsg = new ProtoMessage(spb, Opcode.CmdRet);
                     msg.getChannel().writeAndFlush(smsg);
                 }
+                if (cmd.equals("channels")) {
+                    var spb = ProtoDebug.Cmd.newBuilder().setText(netServer.channelContainer.DebugChannels()).build();
+                    var smsg = new ProtoMessage(spb, Opcode.CmdRet);
+                    msg.getChannel().writeAndFlush(smsg);
+                }
             }
-            default -> {
-                logger.warn("Unexpected value: {}", msg.getOpcode());
-            }
+            default -> logger.warn("Unexpected value: {}", msg.getOpcode());
         }
     }
 }

@@ -26,11 +26,26 @@ import java.io.InputStreamReader;
 public class CliBoot {
     private static final Logger logger = LoggerFactory.getLogger(CliBoot.class);
 
+    public String[] args;
     public EStatus status;
     private ChannelPipeline pipe;
     private Dispatch dispatch;
     private CliHandler cliHandler;
     private static int pingId;
+
+    private String host = "localhost";
+    private int port = 9001;
+
+    EventLoopGroup group;
+    Bootstrap bs;
+
+    public CliBoot(String[] args) {
+        this.args = args;
+        if (args.length == 2) {
+            host = args[0];
+            port = Integer.parseInt(args[1]);
+        }
+    }
 
     public void init() {
         status = EStatus.init;
@@ -45,44 +60,64 @@ public class CliBoot {
 
         // 线程 1 阻塞监听命令行输入
         // 线程 2 连接到服务器
-        EventLoopGroup group = new NioEventLoopGroup(2);
+        group = new NioEventLoopGroup(2);
+        bs = new Bootstrap();
 
-        try {
-            Bootstrap b = new Bootstrap();
-            group.execute(() -> {
-                while (true) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                    try {
-                        var s = br.readLine();
-                        if (s.isEmpty()) {
-                            continue;
-                        }
-                        if (s.indexOf("ping") == 0) {
-                            var proto = ProtoDebug.Ping.newBuilder().setId(++pingId).build();
-                            var msg = new ProtoMessage(proto, Opcode.Ping);
-                            pipe.channel().writeAndFlush(msg);
-                            continue;
-                        }
-                        if (s.indexOf("echo ") == 0) {
-                            var proto = ProtoDebug.Echo.newBuilder().setText(s.substring(5)).build();
-                            var msg = new ProtoMessage(proto, Opcode.EchoReq);
-                            pipe.channel().writeAndFlush(msg);
-                            continue;
-                        }
-                        if (s.indexOf("/") == 0) {
-                            var proto = ProtoDebug.Cmd.newBuilder().setText(s.substring(1)).build();
-                            var msg = new ProtoMessage(proto, Opcode.CmdReq);
-                            pipe.channel().writeAndFlush(msg);
-                            continue;
-                        }
-                        logger.warn("unknow command.");
-                    } catch (IOException e) {
-                        logger.error(e.getMessage());
-                        return;
+        runCli();
+        runConnect();
+    }
+
+    private void runCli() {
+        group.execute(() -> {
+            while (true) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                try {
+                    var s = br.readLine();
+                    if (s.isEmpty()) {
+                        continue;
                     }
+                    if (s.indexOf("hello") == 0) {
+                        var proto = ProtoDebug.Hello.newBuilder().setText(s.substring(6)).build();
+                        var msg = new ProtoMessage(proto, Opcode.Hello);
+                        pipe.channel().writeAndFlush(msg);
+                        continue;
+                    }
+                    if (s.indexOf("ping") == 0) {
+                        var proto = ProtoDebug.Ping.newBuilder().setId(++pingId).build();
+                        var msg = new ProtoMessage(proto, Opcode.Ping);
+                        pipe.channel().writeAndFlush(msg);
+                        continue;
+                    }
+                    if (s.indexOf("echo ") == 0) {
+                        var proto = ProtoDebug.Echo.newBuilder().setText(s.substring(5)).build();
+                        var msg = new ProtoMessage(proto, Opcode.EchoReq);
+                        pipe.channel().writeAndFlush(msg);
+                        continue;
+                    }
+                    if (s.indexOf("/") == 0) {
+                        var proto = ProtoDebug.Cmd.newBuilder().setText(s.substring(1)).build();
+                        var msg = new ProtoMessage(proto, Opcode.CmdReq);
+                        pipe.channel().writeAndFlush(msg);
+                        continue;
+                    }
+                    if (s.indexOf("token ") == 0) {
+                        var proto = ProtoDebug.GmLoginReq.newBuilder().setToken(s.substring(6)).build();
+                        var msg = new ProtoMessage(proto, Opcode.GmLoginReq);
+                        pipe.channel().writeAndFlush(msg);
+                        continue;
+                    }
+                    logger.warn("unknow command.");
+                } catch (IOException e) {
+                    logger.error(e.getMessage());
+                    return;
                 }
-            });
-            b.group(group)
+            }
+        });
+    }
+
+    private void runConnect() {
+        try {
+            bs.group(group)
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.TCP_NODELAY, true)
                     .handler(new ChannelInitializer<SocketChannel>() {
@@ -101,8 +136,8 @@ public class CliBoot {
                             pipe.addLast(protoHandler);
                         }
                     });
-            logger.info("connect to {}:{}", "localhost", 9004);
-            ChannelFuture f = b.connect("127.0.0.1", 9004).sync();
+            logger.info("connect to {}:{}", host, port);
+            ChannelFuture f = bs.connect(host, port).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             logger.error(e.getMessage());
