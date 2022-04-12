@@ -95,3 +95,14 @@ message MoveSync {
   int32 id = 1;                   // 场景 ID
   repeated PlayerInfo info = 2;   // 场景信息
 }
+
+// login server
+
+message GmLoginReq {
+  string token = 1;
+}
+
+message GmLoginRet {
+  int32 id = 1;
+}
+
