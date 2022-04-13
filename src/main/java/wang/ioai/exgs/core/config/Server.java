@@ -6,11 +6,13 @@ public class Server {
     @JsonProperty("ip")
     public String ip;
     @JsonProperty("manager")
-    public ListenInfo manager;
+    public ServerBaseConfig manager;
     @JsonProperty("game")
-    public ListenInfo game;
+    public ServerBaseConfig game;
     @JsonProperty("route")
-    public ListenInfo route;
+    public ServerBaseConfig route;
+    @JsonProperty("login")
+    public ServerBaseConfig login;
 
     public String mongo_host;
     public int mongo_port;
