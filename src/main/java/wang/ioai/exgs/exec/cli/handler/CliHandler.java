@@ -19,6 +19,7 @@ public class CliHandler implements INetMessage {
         dispatch.registMessage1(Opcode.CmdRet, this);
         dispatch.registMessage1(Opcode.EchoReq, this);
         dispatch.registMessage1(Opcode.EchoRet, this);
+        dispatch.registMessage1(Opcode.GmLoginRet, this);
     }
 
     @Override
@@ -48,13 +49,17 @@ public class CliHandler implements INetMessage {
                 var pb = ProtoDebug.Cmd.parseFrom(msg.getBuf());
                 var cmd = pb.getText();
                 if (cmd.equals("exit")) {
-                    logger.info("receive command exit, server will stop now.");
+                    System.out.printf("receive command exit, server will stop now.%n");
                     // GData.netServer.close();
                 }
             }
             case Opcode.CmdRet -> {
                 var pb = ProtoDebug.Cmd.parseFrom(msg.getBuf());
-                logger.debug("/ ret: {}", pb.getText());
+                System.out.printf("%s", pb.getText());
+            }
+            case Opcode.GmLoginRet -> {
+                var pb = ProtoDebug.GmLoginRet.parseFrom(msg.getBuf());
+                System.out.printf("%d", pb.getId());
             }
             default -> {
                 logger.warn("Unexpected value: {}", msg.getOpcode());
