@@ -1,48 +1,44 @@
 package wang.ioai.exgs.exec.master;
 
+import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import wang.ioai.exgs.core.BaseServer;
 import wang.ioai.exgs.core.config.Config;
-import wang.ioai.exgs.core.net.NetServer;
 import wang.ioai.exgs.core.define.EStatus;
-import wang.ioai.exgs.core.net.handler.BaseHandler;
+import wang.ioai.exgs.core.net.ChannelContainer;
 import wang.ioai.exgs.core.system.NodeInfo;
 import wang.ioai.exgs.core.util.CommonPath;
 
 public class MasterBoot {
     private static final Logger logger = LoggerFactory.getLogger(MasterBoot.class);
 
-    public static Config config;
-    public static NetServer netServer;
-    public static BaseHandler baseHandler;
-    public static NodeInfo nodeInfo;
+    public Config config;
+    public BaseServer baseServer;
+    public ChannelContainer channelContainer;
 
     public MasterBoot() {
-        logger.info("master server start.");
-        logger.info("user.dir: {}", CommonPath.userPath());
-        logger.info("pid: {}", ProcessHandle.current().pid());
-
-        nodeInfo = new NodeInfo();
+        var nodeInfo = new NodeInfo();
         nodeInfo.status = EStatus.boot;
         nodeInfo.node_id = 1;
-        nodeInfo.node_type = 1;
+        nodeInfo.node_type = 4;
         nodeInfo.updateStartTime();
 
+        baseServer = new BaseServer(nodeInfo);
         config = new Config();
-        netServer = new NetServer();
-        baseHandler = new BaseHandler(netServer);
+        channelContainer = new ChannelContainer();
+        // authHandler = new AuthHandler(this);
+        // authModule = new AuthModule();
     }
 
     public void init() {
-        nodeInfo.status = EStatus.init;
         config.load(CommonPath.configPath());
-        netServer.init(config.server.manager);
-        baseHandler.init(netServer.dispatch);
+        baseServer.init(config.server.manager, channelContainer);
+        // authHandler.init(baseServer.netServer.dispatch);
+        // authModule.init();
     }
 
     public void run() {
-        nodeInfo.status = EStatus.running;
-        netServer.start();
+        baseServer.run();
     }
 }
